@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4210812053626736012}
   - component: {fileID: 6178701489847268061}
   - component: {fileID: 6656017289246498357}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Honeycomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470bb31f96b566c4c9cb00372a141a59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endComb: 1
+  neighborCheckLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!58 &6656017289246498357
 CircleCollider2D:
   m_ObjectHideFlags: 0

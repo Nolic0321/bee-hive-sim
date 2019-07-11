@@ -4,19 +4,26 @@ using UnityEngine;
 
 namespace Com.PandarooStudios.BeeSim
 {
-    public class Hive : MonoBehaviour
+    public class Hive : Singleton<Hive>
     {
         #region Private Variables
 
         [SerializeField]
         private Vector2 diagOffset;
 
-        private List<GameObject> endCombs;
+        private List<Honeycomb> endCombs;
 
         [SerializeField]
         private Vector2 offset;
 
         #endregion Private Variables
+
+        #region Properties
+
+        public Vector2 DiagOffset { get { return diagOffset; } }
+        public Vector2 OffSet { get { return offset; } }
+
+        #endregion Properties
 
         #region Public Variables
 
@@ -29,10 +36,15 @@ namespace Com.PandarooStudios.BeeSim
         // Start is called before the first frame update
         private void Start()
         {
-            endCombs = new List<GameObject>();
+            endCombs = new List<Honeycomb>();
+
             if (honeycombPrefab != null)
             {
-                // Begin honecomb creation coroutine
+                // Create first foundation comb
+                GameObject newComb = GameObject.Instantiate(honeycombPrefab, transform.position, Quaternion.identity);
+                endCombs.Add(newComb.GetComponent<Honeycomb>());
+                // Begin honecomb creation coroutinex
+                StartCoroutine(CreateComb());
             }
         }
 
@@ -49,8 +61,14 @@ namespace Com.PandarooStudios.BeeSim
         {
             while (true)
             {
+                Honeycomb parentComb = endCombs[Random.Range(0, endCombs.Count - 1)];
                 // Create New honeycomb
+                GameObject newComb = GameObject.Instantiate(honeycombPrefab, parentComb.GetFreeNeighbor(), Quaternion.identity);
+                endCombs.Add(newComb.GetComponent<Honeycomb>());
+                if (!parentComb.IsEndComb)
+                    endCombs.Remove(parentComb);
                 // Wait
+                yield return new WaitForSecondsRealtime(Random.Range(0, 3));
             }
         }
 
